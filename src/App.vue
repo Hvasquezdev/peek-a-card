@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import Card from '@/components/Card'
 
 export default {
@@ -30,7 +30,22 @@ export default {
   setup() {
     const cardList = ref([])
     const userSelection = ref([])
-    const status = ref('')
+
+    const status = computed(() => {
+      if (remainingPairs.value === 0) {
+        return 'Player wins!'
+      }
+
+      return `Remaining pairs: ${remainingPairs.value}`
+    })
+
+    const remainingPairs = computed(() => {
+      const list = Array.from(cardList.value)
+      const remainingCards = list.filter((card) => (
+        card.matched === false
+      )).length
+      return remainingCards / 2
+    })
 
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
@@ -75,7 +90,8 @@ export default {
       cardList,
       flipCard,
       userSelection,
-      status
+      status,
+      remainingPairs
     }
   }
 }
