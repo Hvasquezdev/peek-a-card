@@ -16,7 +16,7 @@
   <h2>
     {{ status }}
   </h2>
-  <button @click="suffleCards">Shuffle</button>
+  <button @click="restartGame">Restart game</button>
 </template>
 
 <script>
@@ -75,13 +75,21 @@ export default {
       return arrToShuffle
     }
 
-    const updateCardPositionAfterShuffle = (first, second, i, j) => {
-      first.position = i
-      second.position = j
+    const suffleCards = () => {
+      cardList.value = shuffleArray(cardList.value, (first, second, i, j) => {
+        first.position = i
+        second.position = j
+      })
     }
 
-    const suffleCards = () => {
-      cardList.value = shuffleArray(cardList.value, updateCardPositionAfterShuffle)
+    const restartGame = () => {
+      suffleCards()
+
+      cardList.value = cardList.value.map(card => ({
+        ...card,
+        matched: false,
+        visible: false
+      }))
     }
 
     const flipCard = (payload) => {
@@ -116,7 +124,7 @@ export default {
       userSelection,
       status,
       remainingPairs,
-      suffleCards
+      restartGame
     }
   }
 }
