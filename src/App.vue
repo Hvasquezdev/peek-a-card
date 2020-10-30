@@ -5,12 +5,16 @@
     <Card
       v-for="(card, i) in cardList"
       :key="`card-${i}`"
-      :value="card"
+      :value="card.value"
+      :visible="card.visible"
+      :position="card.position"
+      @select-card="flipCard"
     />
   </section>
 </template>
 
 <script>
+import { ref } from 'vue'
 import Card from '@/components/Card'
 
 export default {
@@ -19,14 +23,23 @@ export default {
     Card
   },
   setup() {
-    const cardList = []
+    const cardList = ref([])
 
     for (let i = 0; i < 16; i++) {
-      cardList.push(i)      
+      cardList.value.push({
+        value: i,
+        visible: false,
+        position: i
+      })      
+    }
+
+    const flipCard = ({ position }) => {
+      cardList.value[position].visible = true
     }
 
     return {
-      cardList
+      cardList,
+      flipCard
     }
   }
 }
