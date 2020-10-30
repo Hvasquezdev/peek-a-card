@@ -224,8 +224,10 @@ export default {
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(4, 120px);
-  grid-template-rows: repeat(4, 140px);
+  grid-template-columns: repeat(2, 140px);
+  grid-template-rows: repeat(8, 180px);
+  /* grid-template-columns: repeat(4, 120px);
+  grid-template-rows: repeat(4, 140px); */
   column-gap: 20px;
   row-gap: 20px;
   justify-content: center;
@@ -268,5 +270,19 @@ export default {
 
 .shuffle-cards-move {
   transition: 0.8s transform ease-in;
+}
+
+@media screen and (min-width: 600px) {
+  .game-board {
+    grid-template-columns: repeat(4, 120px);
+    grid-template-rows: repeat(4, 150px);
+  }
+}
+
+@media screen and (min-width: 1260px) {
+  .game-board {
+    grid-template-columns: repeat(4, 140px);
+    grid-template-rows: repeat(4, 180px);
+  }
 }
 </style>
