@@ -16,6 +16,7 @@
   <h2>
     {{ status }}
   </h2>
+  <button @click="suffleCards">Shuffle</button>
 </template>
 
 <script>
@@ -56,6 +57,33 @@ export default {
       })      
     }
 
+    const shuffleArray = (arr, cb) => {
+      const arrToShuffle = Array.from(arr)
+
+      for (let i = arrToShuffle.length -1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+
+        if (j !== i) {
+          [arrToShuffle[i], arrToShuffle[j]] = [arrToShuffle[j], arrToShuffle[i]]
+
+          if (cb) {
+            cb(arrToShuffle[i], arrToShuffle[j], i, j)
+          }
+        }
+      }
+
+      return arrToShuffle
+    }
+
+    const updateCardPositionAfterShuffle = (first, second, i, j) => {
+      first.position = i
+      second.position = j
+    }
+
+    const suffleCards = () => {
+      cardList.value = shuffleArray(cardList.value, updateCardPositionAfterShuffle)
+    }
+
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true
 
@@ -71,13 +99,9 @@ export default {
         const cardTwo = current[1]
 
         if (cardOne.faceValue === cardTwo.faceValue) {
-          status.value = 'Matched!'
-
           cardList.value[cardOne.position].matched = true
           cardList.value[cardTwo.position].matched = true
         } else {
-          status.value = 'Mismatch!'
-
           cardList.value[cardOne.position].visible = false
           cardList.value[cardTwo.position].visible = false
         }
@@ -91,7 +115,8 @@ export default {
       flipCard,
       userSelection,
       status,
-      remainingPairs
+      remainingPairs,
+      suffleCards
     }
   }
 }
