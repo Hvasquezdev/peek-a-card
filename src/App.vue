@@ -127,8 +127,12 @@ export default {
           cardList.value[cardOne.position].matched = true
           cardList.value[cardTwo.position].matched = true
         } else {
-          cardList.value[cardOne.position].visible = false
-          cardList.value[cardTwo.position].visible = false
+          const timeOut = setTimeout(() => {
+            cardList.value[cardOne.position].visible = false
+            cardList.value[cardTwo.position].visible = false
+            
+            clearTimeout(timeOut)
+          }, 1000);
         }
 
         userSelection.value.length = 0
