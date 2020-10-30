@@ -9,9 +9,7 @@
         <img src="/images/checkmark.svg" alt="Check mark" />
       </figure>
     </div>
-    <div class="card-face is-back">
-      Back
-    </div>
+    <div class="card-face is-back" />
   </div>
 </template>
 
@@ -37,11 +35,15 @@ export default {
     matched: {
       type: Boolean,
       default: false
+    },
+    isPlaying: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
     const selectCard = () => {
-      if (props.visible === true) { return }
+      if (props.visible === true || props.isPlaying === false) { return }
       
       emit('select-card', {
         position: props.position,

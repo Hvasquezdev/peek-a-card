@@ -13,21 +13,27 @@
       :visible="card.visible"
       :position="card.position"
       :matched="card.matched"
+      :is-playing="isPlaying"
       @select-card="flipCard"
     />
   </transition-group>
 
-  <h2 class="game-status">
+  <h2 v-if="isPlaying" class="game-status">
     {{ status }}
   </h2>
-  <button class="game-restart-btn" @click="restartGame">
+
+  <button v-if="!isPlaying" class="game-button game-play-btn" @click="startGame">
+    <img src="/images/play.svg" alt="Play icon" />
+    Play game
+  </button>
+  <button v-else class="game-button game-restart-btn" @click="restartGame">
     <img src="/images/restart.svg" alt="Restart icon" />
     Restart game
   </button>
 </template>
 
 <script>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onBeforeMount } from 'vue'
 import { launchConfetti } from '@/utils/confetti'
 import Card from '@/components/Card'
 
@@ -39,6 +45,7 @@ export default {
   setup() {
     const cardList = ref([])
     const userSelection = ref([])
+    const isPlaying = ref(false)
 
     const uuid = () => `_${Math.random().toString(36).substr(2, 9)}`
 
@@ -79,12 +86,22 @@ export default {
           matched: false
         }
 
-        cardList.value[listSize] = { ...value, position: listSize, id: uuid() }
-        cardList.value[listSize + 1] = { ...value, position: listSize + 1, id: uuid() }
+        const getRandomVisible = () => Math.floor(Math.random() * 10) % 2 === 0
+
+        cardList.value[listSize] = {
+          ...value,
+          id: uuid(),
+          position: listSize,
+          visible: getRandomVisible()
+        }
+        cardList.value[listSize + 1] = {
+          ...value,
+          id: uuid(),
+          position: listSize + 1,
+          visible: getRandomVisible()
+        }
       })
     }
-
-    generateCardList()
 
     const shuffleArray = (arr, cb) => {
       const arrToShuffle = Array.from(arr)
@@ -111,6 +128,11 @@ export default {
       })
     }
 
+    const startGame = () => {
+      restartGame()
+      isPlaying.value = true
+    }
+
     const restartGame = () => {
       suffleCards()
 
@@ -129,6 +151,11 @@ export default {
         payload
       ]
     }
+
+    onBeforeMount(() => {
+      generateCardList()
+      suffleCards()
+    })
 
     watch(remainingPairs, (current) => {
       if (current === 0) {
@@ -160,10 +187,11 @@ export default {
     return {
       cardList,
       flipCard,
-      userSelection,
       status,
       remainingPairs,
-      restartGame
+      restartGame,
+      startGame,
+      isPlaying
     }
   }
 }
@@ -208,12 +236,11 @@ export default {
   font-weight: 500;
   text-transform: capitalize;
   color: #fff;
-  margin-bottom: 20px;
   margin-top: 20px;
 }
 
-.game-restart-btn {
-  background: orange;
+.game-button {
+  background: #59f72c;
   border: none;
   padding: 10px 20px;
   display: flex;
@@ -222,10 +249,21 @@ export default {
   color: #fff;
   text-transform: capitalize;
   border-radius: 4px;
+  font-size: 18px;
 }
 
-.game-restart-btn img {
+.game-button img {
   margin-right: 10px;
+}
+
+.game-restart-btn,
+.game-play-btn {
+  margin-top: 20px;
+}
+
+
+.game-restart-btn {
+  background: #ffd600;
 }
 
 .shuffle-cards-move {
