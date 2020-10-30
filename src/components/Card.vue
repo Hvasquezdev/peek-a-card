@@ -31,10 +31,14 @@ export default {
     }
   },
   setup(props, { emit }) {
-    const selectCard = () => emit('select-card', {
-      position: props.position,
-      faceValue: props.value
-    })
+    const selectCard = () => {
+      if (props.visible === true) { return }
+      
+      emit('select-card', {
+        position: props.position,
+        faceValue: props.value
+      })
+    }
 
     return {
       selectCard

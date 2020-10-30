@@ -48,14 +48,31 @@ export default {
       return remainingCards / 2
     })
 
-    for (let i = 0; i < 16; i++) {
-      cardList.value.push({
-        value: (i % 2 === 0) ? 1 : 2,
-        visible: false,
-        position: i,
-        matched: false
-      })      
+    const generateCardList = () => {
+      const cards = [1, 2, 3, 4, 5, 6, 7, 8]
+
+      cards.forEach((card, index) => {
+        cardList.value.push({
+          value: index,
+          visible: false,
+          position: null,
+          matched: false
+        })
+        cardList.value.push({
+          value: index,
+          visible: false,
+          position: null,
+          matched: false
+        })
+      })
+
+      cardList.value = cardList.value.map((card, index) => ({
+        ...card,
+        position: index
+      }))
     }
+
+    generateCardList()
 
     const shuffleArray = (arr, cb) => {
       const arrToShuffle = Array.from(arr)
