@@ -28,6 +28,7 @@
 
 <script>
 import { ref, watch, computed } from 'vue'
+import { launchConfetti } from '@/utils/confetti'
 import Card from '@/components/Card'
 
 export default {
@@ -128,6 +129,12 @@ export default {
         payload
       ]
     }
+
+    watch(remainingPairs, (current) => {
+      if (current === 0) {
+        launchConfetti()
+      }
+    })
 
     watch(userSelection, (current) => {
       if (current.length === 2) {
