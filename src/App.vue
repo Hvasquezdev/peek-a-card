@@ -1,17 +1,21 @@
 <template>
   <h1 class="game-title">Peek a card</h1>
 
-  <section class="game-board">
+  <transition-group
+    tag="section"
+    class="game-board"
+    name="shuffle-cards"
+  >
     <Card
-      v-for="(card, i) in cardList"
-      :key="`card-${i}`"
+      v-for="(card) in cardList"
+      :key="`card-${card.id}-${card.value}`"
       :value="card.value"
       :visible="card.visible"
       :position="card.position"
       :matched="card.matched"
       @select-card="flipCard"
     />
-  </section>
+  </transition-group>
 
   <h2 class="game-status">
     {{ status }}
@@ -34,6 +38,8 @@ export default {
   setup() {
     const cardList = ref([])
     const userSelection = ref([])
+
+    const uuid = () => `_${Math.random().toString(36).substr(2, 9)}`
 
     const status = computed(() => {
       if (remainingPairs.value === 0) {
@@ -72,8 +78,8 @@ export default {
           matched: false
         }
 
-        cardList.value[listSize] = { ...value, position: listSize }
-        cardList.value[listSize + 1] = { ...value, position: listSize + 1 }
+        cardList.value[listSize] = { ...value, position: listSize, id: uuid() }
+        cardList.value[listSize + 1] = { ...value, position: listSize + 1, id: uuid() }
       })
     }
 
@@ -213,5 +219,9 @@ export default {
 
 .game-restart-btn img {
   margin-right: 10px;
+}
+
+.shuffle-cards-move {
+  transition: 0.8s transform ease-in;
 }
 </style>
