@@ -1,6 +1,6 @@
 <template>
-  <div :class="{ 'is-matched': matched }" class="card" @click="selectCard">
-    <div v-if="visible" class="card-face is-front">
+  <div :class="classNames" class="card" @click="selectCard">
+    <div class="card-face is-front">
       <figure class="face-value">
         <img :src="`/images/${value}.png`" :alt="value">
       </figure>
@@ -9,13 +9,16 @@
         <img src="/images/checkmark.svg" alt="Check mark" />
       </figure>
     </div>
-    <div v-else class="card-face is-back">
+    <div class="card-face is-back">
       Back
     </div>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue'
+
+
 export default {
   name: 'Card',
   props: {
@@ -46,8 +49,16 @@ export default {
       })
     }
 
+    const classNames = computed(() => {
+      return {
+        'is-flipped': props.visible,
+        'is-matched': props.matched
+      }
+    })
+
     return {
-      selectCard
+      selectCard,
+      classNames
     }
   }
 }
@@ -61,6 +72,12 @@ export default {
 .card,
 .card-face {
   border-radius: 14px;
+  transition: 0.3s transform ease-in;
+  transform-style: preserve-3d;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
 }
 
 .card-face {
@@ -68,6 +85,7 @@ export default {
   height: 100%;
   position: absolute;
   padding: 15px;
+  backface-visibility: hidden;
 }
 
 .card-face.is-front {
@@ -78,6 +96,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: rotateY(180deg);
 }
 
 .card-face.is-front .face-value {
