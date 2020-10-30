@@ -1,5 +1,5 @@
 <template>
-  <h1>Peek a card</h1>
+  <h1 class="game-title">Peek a card</h1>
 
   <section class="game-board">
     <Card
@@ -13,10 +13,13 @@
     />
   </section>
 
-  <h2>
+  <h2 class="game-status">
     {{ status }}
   </h2>
-  <button @click="restartGame">Restart game</button>
+  <button class="game-restart-btn" @click="restartGame">
+    <img src="/images/restart.svg" alt="Restart icon" />
+    Restart game
+  </button>
 </template>
 
 <script>
@@ -49,27 +52,29 @@ export default {
     })
 
     const generateCardList = () => {
-      const cards = [1, 2, 3, 4, 5, 6, 7, 8]
+      const cards = [
+        'ghost',
+        'candy',
+        'bat',
+        'cauldron',
+        'cupcake',
+        'moon',
+        'pumpkin',
+        'witch-hat'
+      ]
 
-      cards.forEach((card, index) => {
-        cardList.value.push({
-          value: index,
+      cards.forEach((card) => {
+        const listSize = cardList.value.length
+        const value = {
+          value: card,
           visible: false,
           position: null,
           matched: false
-        })
-        cardList.value.push({
-          value: index,
-          visible: false,
-          position: null,
-          matched: false
-        })
+        }
+
+        cardList.value[listSize] = { ...value, position: listSize }
+        cardList.value[listSize + 1] = { ...value, position: listSize + 1 }
       })
-
-      cardList.value = cardList.value.map((card, index) => ({
-        ...card,
-        position: index
-      }))
     }
 
     generateCardList()
@@ -157,16 +162,56 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background-image: url('/images/page-bg.png');
+  background-color: #00070c;
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-title {
+  font-size: 32px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #fff;
+  margin-bottom: 20px;
 }
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-template-rows: repeat(4, 100px);
-  column-gap: 30px;
-  row-gap: 30px;
+  grid-template-columns: repeat(4, 120px);
+  grid-template-rows: repeat(4, 140px);
+  column-gap: 20px;
+  row-gap: 20px;
   justify-content: center;
+}
+
+.game-status {
+  font-size: 24px;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: #fff;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.game-restart-btn {
+  background: orange;
+  border: none;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-transform: capitalize;
+  border-radius: 4px;
+}
+
+.game-restart-btn img {
+  margin-right: 10px;
 }
 </style>
