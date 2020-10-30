@@ -1,7 +1,7 @@
 import confetti from 'canvas-confetti'
 
 export const launchConfetti = () => {
-  const end = Date.now() + (15 * 1000);
+  const end = Date.now() + (10 * 1000);
 
   // go Buckeyes!
   const colors = ['#ffd600', '#59f72c'];
