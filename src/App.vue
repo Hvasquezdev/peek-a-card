@@ -35,6 +35,7 @@
 <script>
 import { ref, watch, computed, onBeforeMount } from 'vue';
 import { launchConfetti } from '@/utils/confetti';
+import createDeck from '@/features/createDeck';
 import Card from '@/components/Card';
 
 export default {
@@ -43,14 +44,9 @@ export default {
     Card,
   },
   setup() {
-    const cardList = ref([]);
+    const { cardList } = createDeck();
     const userSelection = ref([]);
     const isPlaying = ref(false);
-
-    const uuid = () =>
-      `_${Math.random()
-        .toString(36)
-        .substr(2, 9)}`;
 
     const status = computed(() => {
       if (remainingPairs.value === 0) {
@@ -66,44 +62,6 @@ export default {
         .length;
       return remainingCards / 2;
     });
-
-    const generateCardList = () => {
-      const cards = [
-        'ghost',
-        'candy',
-        'bat',
-        'cauldron',
-        'cupcake',
-        'moon',
-        'pumpkin',
-        'witch-hat',
-      ];
-
-      cards.forEach((card) => {
-        const listSize = cardList.value.length;
-        const value = {
-          value: card,
-          visible: false,
-          position: null,
-          matched: false,
-        };
-
-        const getRandomVisible = () => Math.floor(Math.random() * 10) % 2 === 0;
-
-        cardList.value[listSize] = {
-          ...value,
-          id: uuid(),
-          position: listSize,
-          visible: getRandomVisible(),
-        };
-        cardList.value[listSize + 1] = {
-          ...value,
-          id: uuid(),
-          position: listSize + 1,
-          visible: getRandomVisible(),
-        };
-      });
-    };
 
     const shuffleArray = (arr, cb) => {
       const arrToShuffle = Array.from(arr);
@@ -155,7 +113,6 @@ export default {
     };
 
     onBeforeMount(() => {
-      generateCardList();
       suffleCards();
     });
 
