@@ -35,7 +35,7 @@
 <script>
 import { ref, watch, onBeforeMount } from 'vue';
 import { launchConfetti } from '@/utils/confetti';
-import createDeck from '@/features/createDeck';
+import { createDeck } from '@/features/createDeck';
 import { createGame } from '@/features/createGame';
 import Card from '@/components/Card';
 

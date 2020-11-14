@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import uid from '@/utils/uid';
+import { uid } from '@/utils/uid';
 
 const cardList = ref([]);
 
@@ -30,10 +30,10 @@ const initDeck = (cardDeck) => {
   });
 };
 
-export default function createDeck(cards) {
+export const createDeck = (cards) => {
   initDeck(cards);
 
   return {
     cardList,
   };
-}
+};
