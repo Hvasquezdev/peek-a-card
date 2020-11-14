@@ -2,7 +2,7 @@
   <div :class="classNames" class="card" @click="selectCard">
     <div class="card-face is-front">
       <figure class="face-value">
-        <img :src="`/images/${value}.png`" :alt="value">
+        <img :src="`/images/${value}.png`" :alt="value" />
       </figure>
 
       <figure class="icon-checkmark">
@@ -14,56 +14,57 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-
+import { computed } from 'vue';
 
 export default {
   name: 'Card',
   props: {
     value: {
       type: String,
-      required: true
+      required: true,
     },
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     position: {
       type: Number,
-      required: true
+      required: true,
     },
     matched: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isPlaying: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup(props, { emit }) {
     const selectCard = () => {
-      if (props.visible === true || props.isPlaying === false) { return }
-      
+      if (props.visible === true || props.isPlaying === false) {
+        return;
+      }
+
       emit('select-card', {
         position: props.position,
-        faceValue: props.value
-      })
-    }
+        faceValue: props.value,
+      });
+    };
 
     const classNames = computed(() => {
       return {
         'is-flipped': props.visible,
-        'is-matched': props.matched
-      }
-    })
+        'is-matched': props.matched,
+      };
+    });
 
     return {
       selectCard,
-      classNames
-    }
-  }
-}
+      classNames,
+    };
+  },
+};
 </script>
 
 <style scoped>
