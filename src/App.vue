@@ -33,11 +33,13 @@
 </template>
 
 <script>
-import { ref, watch, computed, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { launchConfetti } from '@/utils/confetti';
 import createDeck from '@/features/createDeck';
-import halloweenDeck from '@/data/halloweenDeck.json';
+import { createGame } from '@/features/createGame';
 import Card from '@/components/Card';
+
+import halloweenDeck from '@/data/halloweenDeck.json';
 
 export default {
   name: 'App',
@@ -46,66 +48,15 @@ export default {
   },
   setup() {
     const { cardList } = createDeck(halloweenDeck);
+    const {
+      isPlaying,
+      startGame,
+      suffleCards,
+      restartGame,
+      status,
+      remainingPairs,
+    } = createGame(cardList);
     const userSelection = ref([]);
-    const isPlaying = ref(false);
-
-    const status = computed(() => {
-      if (remainingPairs.value === 0) {
-        return 'Player wins!';
-      }
-
-      return `Remaining pairs: ${remainingPairs.value}`;
-    });
-
-    const remainingPairs = computed(() => {
-      const list = Array.from(cardList.value);
-      const remainingCards = list.filter((card) => card.matched === false)
-        .length;
-      return remainingCards / 2;
-    });
-
-    const shuffleArray = (arr, cb) => {
-      const arrToShuffle = Array.from(arr);
-
-      for (let i = arrToShuffle.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-
-        if (j !== i) {
-          [arrToShuffle[i], arrToShuffle[j]] = [
-            arrToShuffle[j],
-            arrToShuffle[i],
-          ];
-
-          if (cb) {
-            cb(arrToShuffle[i], arrToShuffle[j], i, j);
-          }
-        }
-      }
-
-      return arrToShuffle;
-    };
-
-    const suffleCards = () => {
-      cardList.value = shuffleArray(cardList.value, (first, second, i, j) => {
-        first.position = i;
-        second.position = j;
-      });
-    };
-
-    const startGame = () => {
-      restartGame();
-      isPlaying.value = true;
-    };
-
-    const restartGame = () => {
-      suffleCards();
-
-      cardList.value = cardList.value.map((card) => ({
-        ...card,
-        matched: false,
-        visible: false,
-      }));
-    };
 
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
