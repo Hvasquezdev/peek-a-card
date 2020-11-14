@@ -36,6 +36,7 @@
 import { ref, watch, computed, onBeforeMount } from 'vue';
 import { launchConfetti } from '@/utils/confetti';
 import createDeck from '@/features/createDeck';
+import halloweenDeck from '@/data/halloweenDeck.json';
 import Card from '@/components/Card';
 
 export default {
@@ -44,7 +45,7 @@ export default {
     Card,
   },
   setup() {
-    const { cardList } = createDeck();
+    const { cardList } = createDeck(halloweenDeck);
     const userSelection = ref([]);
     const isPlaying = ref(false);
 

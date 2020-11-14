@@ -2,16 +2,6 @@ import { ref } from 'vue';
 import uid from '@/utils/uid';
 
 const cardList = ref([]);
-const cards = [
-  'ghost',
-  'candy',
-  'bat',
-  'cauldron',
-  'cupcake',
-  'moon',
-  'pumpkin',
-  'witch-hat',
-];
 
 const getRandomVisible = () => Math.floor(Math.random() * 10) % 2 === 0;
 
@@ -40,7 +30,7 @@ const initDeck = (cardDeck) => {
   });
 };
 
-export default function createDeck() {
+export default function createDeck(cards) {
   initDeck(cards);
 
   return {
